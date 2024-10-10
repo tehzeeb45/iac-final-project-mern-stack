@@ -1,0 +1,13 @@
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      no_cache: true
+    image:  mern-app
+    container_name: websitedemo
+    hostname: websitedemo
+    ports:
+      - "5000:5000"
+      - "27017:27017"  
