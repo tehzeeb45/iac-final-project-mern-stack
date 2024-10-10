@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Create data directories for MongoDB
-RUN mkdir -p /data/db && chown -R mongodb:mongodb /data/db
+RUN mkdir -p /data/db /var/log/mongodb && chown -R mongodb:mongodb /data/db /var/log/mongodb
 
 # Copy the application files into the container
 COPY . .
@@ -32,6 +32,5 @@ RUN npm run build
 WORKDIR /app/backend
 
 # Start MongoDB and the Node.js application
-CMD ["sh", "-c", "mongod --bind_ip_all --dbpath /data/db --logpath /var/log/mongodb.log --fork && npm run server"]
-
+CMD ["sh", "-c", "mongod --bind_ip_all --dbpath /data/db --logpath /var/log/mongodb.log && npm run server"]
 
