@@ -11,12 +11,14 @@ RUN apt-get update && apt-get install -y \
     && curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
     && apt-get install -y nodejs \
     && apt-get install -y mongodb \
-    && apt-get install -y pm2 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Create data directories for MongoDB
 RUN mkdir -p /data/db /var/log/mongodb && chown -R mongodb:mongodb /data/db /var/log/mongodb
+
+# Install pm2 globally using npm (instead of apt)
+RUN npm install -g pm2
 
 # Copy the application files into the container
 COPY . .
@@ -32,7 +34,7 @@ RUN npm run build
 # Switch to the backend directory
 WORKDIR /app/backend
 
-# Start MongoDB and the Node.js application using pm2
+# Use pm2 to start MongoDB and the Node.js server
 CMD ["pm2-runtime", "start", "npm", "--", "run", "server"]
 
 
