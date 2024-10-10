@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     && curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
     && apt-get install -y nodejs \
     && apt-get install -y mongodb \
+    && apt-get install -y pm2 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -31,6 +32,7 @@ RUN npm run build
 # Switch to the backend directory
 WORKDIR /app/backend
 
-# Start MongoDB and the Node.js application
-CMD ["sh", "-c", "mongod --bind_ip_all --dbpath /data/db --logpath /var/log/mongodb.log && npm run server"]
+# Start MongoDB and the Node.js application using pm2
+CMD ["pm2-runtime", "start", "npm", "--", "run", "server"]
+
 
