@@ -17,9 +17,6 @@ RUN apt-get update && apt-get install -y \
 # Create data directories for MongoDB
 RUN mkdir -p /data/db /var/log/mongodb && chown -R mongodb:mongodb /data/db /var/log/mongodb
 
-# Install pm2 globally using npm (instead of apt)
-RUN npm install -g pm2
-
 # Copy the application files into the container
 COPY . .
 
@@ -34,7 +31,7 @@ RUN npm run build
 # Switch to the backend directory
 WORKDIR /app/backend
 
-# Use pm2 to start MongoDB and the Node.js server
-CMD ["pm2-runtime", "start", "npm", "--", "run", "server"]
+# Start MongoDB and the Node.js application
+CMD ["sh", "-c", "mongod --bind_ip_all --dbpath /data/db --logpath /var/log/mongodb.log & npm run server"]
 
 
