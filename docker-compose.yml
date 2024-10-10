@@ -10,4 +10,3 @@ services:
     hostname: websitedemo
     ports:
       - "5000:5000"
-      - "27017:27017"  
